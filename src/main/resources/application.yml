@@ -1,12 +1,15 @@
 server:
-  port: 8080
+  port: ${PORT:8080}
 
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/hms_db
-    username: hms_user
-    password: hms_pass
+    url: ${DATABASE_URL:jdbc:postgresql://localhost:5432/hms_db}
+    username: ${DATABASE_USERNAME:hms_user}
+    password: ${DATABASE_PASSWORD:hms_pass}
     driver-class-name: org.postgresql.Driver
+    hikari:
+      connection-timeout: 30000
+      maximum-pool-size: 5
 
   jpa:
     hibernate:
@@ -25,8 +28,10 @@ spring:
 hms:
   security:
     jwt:
-      secret: hms-super-secret-key-at-least-32-characters-long-for-hs256
-      expiration-ms: 86400000   # 24h
+      secret: ${JWT_SECRET:hms-super-secret-key-at-least-32-characters-long-for-hs256}
+      expiration-ms: ${JWT_EXPIRATION_MS:86400000}
+  cors:
+    allowed-origins: ${CORS_ALLOWED_ORIGINS:http://localhost:5173,http://localhost:80,http://localhost}
 
 logging:
   level:
